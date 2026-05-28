@@ -681,6 +681,100 @@ def export_render(output_path, preset, overwrite):
     output(result, f"已导出到: {result['output']} ({result.get('file_size', 0):,} 字节)")
 
 
+# ── 设计预设命令 ───────────────────────────────────────────
+@cli.group("preset")
+def preset_group():
+    """设计预设 —— 一键切换 PPT 风格和布局模板。"""
+    pass
+
+
+@preset_group.command("list")
+@handle_error
+def preset_list():
+    """列出所有可用的设计预设和布局模板。"""
+    from cli_anything.wps.styles.design_presets import PRESETS
+    from cli_anything.wps.styles.layout_templates import LAYOUTS, TALK_PRESETS
+
+    print("\n=== 设计预设 (Design Presets) ===")
+    for name, preset in PRESETS.items():
+        colors = preset.colors
+        print(f"  {name}: {preset.name}")
+        print(f"    主色: RGB{colors['primary']}  辅色: RGB{colors['secondary']}")
+        print(f"    标题: {preset.fonts['title'][0]} {preset.fonts['title'][1]}pt")
+
+    print("\n=== 布局模板 (Layout Templates) ===")
+    for name, layout in LAYOUTS.items():
+        print(f"  {name}: {layout.description}")
+
+    print("\n=== 演讲类型预设 ===")
+    for name, tp in TALK_PRESETS.items():
+        pages = len(tp["slides"])
+        print(f"  {name}: {tp['name']} ({pages}页)")
+
+    output({"presets": list(PRESETS.keys()),
+            "layouts": list(LAYOUTS.keys()),
+            "talk_types": list(TALK_PRESETS.keys())})
+
+
+@preset_group.command("info")
+@click.argument("name")
+@handle_error
+def preset_info(name):
+    """查看指定预设的详细配置。"""
+    from cli_anything.wps.styles.design_presets import PRESETS
+    from cli_anything.wps.styles.layout_templates import TALK_PRESETS
+
+    if name in PRESETS:
+        p = PRESETS[name]
+        print(f"=== {p.name} ({name}) ===")
+        print(f"颜色: {p.colors}")
+        print(f"字体: {p.fonts}")
+        print(f"间距: {p.spacing}")
+        print(f"规则: {p.rules}")
+    elif name in TALK_PRESETS:
+        tp = TALK_PRESETS[name]
+        print(f"=== {tp['name']} ({name}) ===")
+        print(f"推荐页面序列: {' → '.join(tp['slides'])}")
+        print(f"规则: {tp['rules']}")
+    else:
+        from cli_anything.wps.styles.layout_templates import LAYOUTS
+        if name in LAYOUTS:
+            lt = LAYOUTS[name]
+            print(f"=== {lt.name} ({name}) ===")
+            print(f"分类: {lt.category}")
+            print(f"描述: {lt.description}")
+            print(f"元素数: {len(lt.elements)}")
+
+
+@preset_group.command("apply")
+@click.argument("preset_name")
+@click.option("--talk-type", "-t", type=str, default=None,
+              help="演讲类型: conference/business/defense/school")
+@handle_error
+def preset_apply(preset_name, talk_type):
+    """应用设计预设到当前项目。
+
+    preset_name: academic / consultant / business / tech
+    """
+    from cli_anything.wps.styles.design_presets import PRESETS
+    from cli_anything.wps.styles.layout_templates import TALK_PRESETS
+
+    if preset_name not in PRESETS:
+        available = ", ".join(PRESETS.keys())
+        raise ValueError(f"未知预设: {preset_name}。可用: {available}")
+
+    sess = get_session()
+    proj = sess.get_project()
+    proj.setdefault("design", {})["preset"] = preset_name
+    if talk_type:
+        proj["design"]["talk_type"] = talk_type
+    sess._modified = True
+
+    preset = PRESETS[preset_name]
+    output({"applied": preset_name, "preset": preset.to_dict()},
+           f"已应用设计预设: {preset.name}")
+
+
 # ── 会话命令 ──────────────────────────────────────────────────
 @cli.group()
 def session():
