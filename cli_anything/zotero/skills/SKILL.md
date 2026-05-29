@@ -185,3 +185,37 @@ cli-anything-zotero item context <item-key> --include-notes --include-links --js
 ## Version
 
 0.1.0
+
+---
+
+## Academic Research Skills Integration
+
+Zotero harness integrates 27 academic research skills. Use `skills` command group:
+
+```bash
+cli-anything-zotero skills list              # List all skills
+cli-anything-zotero skills list -c writing   # Writing skills only
+cli-anything-zotero skills pipeline original_article  # Recommended workflow
+cli-anything-zotero skills journal "Nature"  # Journal figure guide
+```
+
+### Skill Categories
+
+| Category | Skills | Description |
+|----------|--------|-------------|
+| search | lit-review, systematic-review, deep-search | Literature discovery |
+| research | ideation, brainstorming, hypothesis, deep-research | Research design |
+| writing | write-paper, manuscript, citation, outline, revision | Paper writing |
+| review | full-review, peer-review, seven-pass, verify-citations, audit-data | Peer review |
+| visualization | slides, schematics, poster, nature-fig | Figures & presentations |
+| analysis | eda, statistics, critical-thinking | Data analysis |
+| pipeline | full-pipeline, research-to-paper | End-to-end workflows |
+
+### Task Pipelines
+
+| Task | Steps |
+|------|-------|
+| literature_review | systematic-review → critical-thinking → write-paper → seven-pass |
+| original_article | hypothesis → statistics → manuscript → schematics → slides → full-review |
+| meta_analysis | deep-search → deep-research → statistics → write-paper → peer-review |
+| thesis | full-pipeline → seven-pass → slides → poster |

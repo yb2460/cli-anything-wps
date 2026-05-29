@@ -1069,6 +1069,61 @@ def repl_command(ctx: click.Context) -> int:
     return run_repl(_current_cli_config(ctx))
 
 
+# ===== Skills Bridge: 调用 27 个 Academic Research Skills =====
+@cli.group("skills")
+def skills_group():
+    """学术研究 Skills —— 文献检索/论文写作/审稿/可视化。"""
+    pass
+
+
+@skills_group.command("list")
+@click.option("--category", "-c", type=str, default=None,
+              help="筛选分类: search/research/writing/review/visualization/analysis/pipeline")
+def skills_list(category):
+    """列出所有可用的学术 Skill。"""
+    from cli_anything.zotero.utils.skills_bridge import list_skills, SKILL_MAP
+
+    if category:
+        skills = SKILL_MAP.get(category, {})
+        print(f"\n=== {category} ===")
+        for key, info in skills.items():
+            print(f"  {key}: {info['name']} — {info['description']}")
+    else:
+        all_skills = list_skills()
+        for cat, keys in all_skills.items():
+            print(f"\n[{cat}]")
+            for key in keys:
+                info = SKILL_MAP[cat][key]
+                print(f"  {key:20s} → {info['skill']:40s} | {info['name']}")
+
+
+@skills_group.command("pipeline")
+@click.argument("task_type",
+                type=click.Choice(["literature_review", "original_article",
+                                    "meta_analysis", "grant_proposal", "thesis"]))
+def skills_pipeline(task_type):
+    """推荐任务对应的 Skill 流水线。"""
+    from cli_anything.zotero.utils.skills_bridge import get_pipeline_for_task
+
+    pipeline = get_pipeline_for_task(task_type)
+    print(f"\n=== {task_type} 推荐流程 ===")
+    for i, step in enumerate(pipeline, 1):
+        cat, key = step.split(".")
+        from cli_anything.zotero.utils.skills_bridge import get_skill
+        info = get_skill(cat, key)
+        if info:
+            print(f"  {i}. [{info['skill']}] {info['name']}: {info['description']}")
+
+
+@skills_group.command("journal")
+@click.argument("journal_name")
+def skills_journal(journal_name):
+    """根据目标期刊获取图表规范 Skill。"""
+    from cli_anything.zotero.utils.skills_bridge import get_journal_guide
+    skill = get_journal_guide(journal_name)
+    print(f"\n{journal_name} → {skill}")
+
+
 def dispatch(argv: list[str] | None = None, prog_name: str | None = None) -> int:
     args = list(sys.argv[1:] if argv is None else argv)
     try:
