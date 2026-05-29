@@ -12,9 +12,9 @@
 
 ## 包含项目
 
-### 1. cli-anything-wps — WPS Office 操控
+### 1. cli-anything-wps — WPS / Microsoft Office 操控
 
-47 个 CLI 命令，通过 COM 自动化接口操控 WPS 文字/表格/演示。
+47 个 CLI 命令，通过 COM 自动化接口操控 WPS Office 或 Microsoft Office（Word/Excel/PowerPoint）。
 
 ```bash
 pip install git+https://github.com/yb2460/cli-anything-wps.git
@@ -67,9 +67,11 @@ cli-anything-zotero catalog search "machine learning"
 ## 系统要求
 
 - Windows 10/11
-- WPS Office 2019+ / Zotero 7+
+- WPS Office 2019+ 或 Microsoft Office 2016+ / Zotero 7+
 - Python 3.10+
 - pywin32
+
+> COM 接口与 Microsoft Office VBA 兼容。如需操控 MS Office，将 ProgID 改为 `PowerPoint.Application` / `Word.Application` / `Excel.Application` 即可。
 
 ## 许可证
 
