@@ -10,22 +10,7 @@ Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-s
 
 | 配置项 | 值 | 说明 |
 |--------|-----|------|
-| **操作系统** | Windows 10/11 | 中文环境，需注意编码问题 |
-| **Python 路径** | `D:\A-ryuyanwenku\Python\python.exe` | 自定义安装，非系统默认 |
-| **Python 包管理** | pip | 常用包：pandas, numpy, matplotlib, seaborn, scikit-learn, sksurv, oncoPredict |
-| **R 环境** | RStudio | 路径：`C:\Users\杨兵\AppData\Local\RStudio\` |
-| **R 编码设置** | **UTF-8** | 必须统一使用 UTF-8，避免中文乱码 |
-| **工作目录** | `D:\A-资料\` | 科研数据与项目主目录 |
-| **UKB 数据** | 本地/超算 | 使用 FUNPACK 工具包，pgAdmin4 数据库 |
-| **超算中心** | 南方科技大学启明超算 | IP: 10.16.22.253，SSH 连接 |
-| **主要研究领域** | 肿瘤生物学 / 结直肠癌 (CRC) / 胃癌 | 类器官、TCGA、GEO、空间转录组 |
-| **目标期刊** | Cancer Research, Cancer Cell, Cancer Discovery, Cancer Letters, Trends in Immunology | 高质量可视化要求 |
-| **绘图工具** | Python (matplotlib/seaborn), BioRender, R (ggplot2) | 矢量图输出，字体放大不模糊 |
-| **文档输出** | Word (.docx), PPT (.pptx), PDF | 直接可打开，无需二次转化 |
-| **代码风格** | 结构化、可循环、自动化管道 | CSV 批量处理、系统化数据清洗 |
-| **GitHub 账号** | yb2460 | Token: `<YOUR_GITHUB_TOKEN>` |
-| **GitHub 仓库** | `cli-anything-wps` (Windows) | https://github.com/yb2460/cli-anything-wps |
-| **GitHub 仓库** | `cli-anything-WPS-mac` (Mac) | https://github.com/yb2460/cli-anything-WPS-mac |
+
 
 
 ## 语言要求
